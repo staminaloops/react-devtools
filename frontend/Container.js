@@ -66,6 +66,10 @@ var DEFAULT_MENU_ITEMS = {
         key: 'showNodesOfType',
         title: 'Show all ' + node.get('name'),
         action: () => store.changeSearch(node.get('name')),
+      }, {
+        key: 'pinNode',
+        title: 'Pin ' + node.get('name'),
+        action: () => store.pinNode(id),
       });
     }
     if (store.capabilities.scroll) {

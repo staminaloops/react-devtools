@@ -44,10 +44,25 @@ class TreeView extends React.Component {
   }
 
   render() {
+    // TODO(sofia): clear this
+    //console.log('pinnedNodes', this.props.pinnedNodes ? this.props.pinnedNodes.toJS() : this.props.pinnedNodes)
+    //console.log('roots', this.props.roots.toJS())
     if (!this.props.roots.count()) {
       if (this.props.searching) {
         return (
           <div style={styles.container}>
+            <div ref={n => this.node = n} style={styles.scroll}>
+              <div style={styles.scrollContents}>
+                { this.props.pinnedNodes &&
+                <div>
+                  <div>Pinned</div>
+                  { this.props.pinnedNodes.map(id => (
+                    <Node key={id} id={id} depth={0} />
+                  )).toJS() }
+                  <div>Root</div>
+                </div> }
+              </div>
+            </div>
             <span>No search results</span>
           </div>
         );
@@ -56,6 +71,14 @@ class TreeView extends React.Component {
           <div style={styles.container}>
             <div ref={n => this.node = n} style={styles.scroll}>
               <div style={styles.scrollContents}>
+              { this.props.pinnedNodes &&
+              <div>
+                <div>Pinned</div>
+                { this.props.pinnedNodes.map(id => (
+                  <Node key={id} id={id} depth={0} />
+                )).toJS() }
+                <div>Root</div>
+              </div> }
               Waiting for roots to load...
               {this.props.reload &&
                 <span>
@@ -73,6 +96,14 @@ class TreeView extends React.Component {
         <div style={styles.container}>
           <div ref={n => this.node = n} style={styles.scroll}>
             <div style={styles.scrollContents}>
+              { this.props.pinnedNodes &&
+              <div>
+                <div>Pinned</div>
+                { this.props.pinnedNodes.map(id => (
+                  <Node key={id} id={id} depth={0} />
+                )).toJS() }
+                <div>Root</div>
+              </div> }
               {this.props.roots.slice(0, MAX_SEARCH_ROOTS).map(id => (
                 <Node key={id} id={id} depth={0} />
               )).toJS()}
@@ -87,6 +118,14 @@ class TreeView extends React.Component {
       <div style={styles.container}>
         <div ref={n => this.node = n} style={styles.scroll}>
           <div style={styles.scrollContents}>
+            { this.props.pinnedNodes &&
+            <div>
+              <div>Pinned</div>
+              { this.props.pinnedNodes.map(id => (
+                <Node key={id} id={id} depth={0} />
+              )).toJS() }
+              <div>Root</div>
+            </div> }
             {this.props.roots.map(id => (
               <Node key={id} id={id} depth={0} />
             )).toJS()}
@@ -136,12 +175,13 @@ var styles = {
 
 var WrappedTreeView = decorate({
   listeners(props) {
-    return ['searchRoots', 'roots'];
+    return ['searchRoots', 'roots', 'pinnedNodes'];
   },
   props(store, props) {
     return {
       roots: store.searchRoots || store.roots,
       searching: !!store.searchRoots,
+      pinnedNodes: store.pinnedNodes,
     };
   },
 }, TreeView);

@@ -117,6 +117,7 @@ class Store extends EventEmitter {
     this.roots = new List();
     this.contextMenu = null;
     this.searchRoots = null;
+    this.pinnedNodes = null;
     this.hovered = null;
     this.selected = null;
     this.selectedTab = 'Elements';
@@ -210,6 +211,15 @@ class Store extends EventEmitter {
       props.children = text;
     }
     this.emit(id);
+  }
+
+  pinNode(id) {
+    if (this.pinnedNodes) {
+      this.pinnedNodes = this.pinnedNodes.insert(id);
+    } else {
+      this.pinnedNodes = List.of(id);
+    }
+    this.emit('pinnedNodes');
   }
 
   changeSearch(text: string): void {
